@@ -1,8 +1,8 @@
 :root {
     --SCALE: 1;
-    --BGCOLOR1: #F8F8F8;
-    --BGCOLOR2: #CCCCCC;
-    --ACCENT: #00596b;
+    --BGCOLOR1: #DAE2E7;
+    --BGCOLOR2: #CED8DF;
+    --ACCENT: #7793A6;
     --FS1: calc( 10px * var(--SCALE));
     --FS2: calc( 13px * var(--SCALE));
     --FS3: calc( 17px * var(--SCALE));
@@ -61,7 +61,7 @@ select {
     background-size: calc( 148 * var(--SCALE)) calc( 148 * var(--SCALE));
     background-repeat: no-repeat;
     background-position: calc( 7px * var(--SCALE)) calc( 108px * var(--SCALE));
-    background-image: url("images/aggregator-logo.png");
+    background-image: url("images/adsblol-favicon.png");
     z-index:2;
     opacity: 0.12;
 }
@@ -155,7 +155,7 @@ select {
     background-position: 0;
     background-color: transparent;
     border: none;
-    background-image: url("images/aggregator-logo.png");
+    background-image: url("images/adsblol-favicon.png");
     z-index: 99;
     opacity: 0.7;
     margin: 4px;
@@ -605,6 +605,18 @@ table.infoSectionTable tr td {
     font-weight: bold;
     color: var(--TXTCOLOR1);
     font-size: var(--FS3);
+}
+
+/* from https://globe.theairtraffic.com/style_5f12e20.css */
+.smallText a {
+    font-weight: 700;
+    color: var(--TXTCOLOR1);
+    font-size: var(--FS1);
+}
+.smallText {
+    font-weight: 700;
+    color: var(--TXTCOLOR1);
+    font-size: var(--FS1);
 }
 
 .infoBlockTitleText {
