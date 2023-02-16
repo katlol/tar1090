@@ -12,6 +12,10 @@
 //			"url" : "https://{a-c}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png"
 //			"url" : "https://{a-c}.tile.openstreetmap.se/osm/{z}/{x}/{y}.png"
 
+if (typeof adsbexchange === 'undefined') {
+    var adsbexchange = false;
+}
+
 function createBaseLayers() {
     let layers = new ol.Collection();
     let layers_group = new ol.layer.Group({
@@ -27,7 +31,7 @@ function createBaseLayers() {
     if (loStore['customTiles'] != undefined) {
         custom_layers.push(new ol.layer.Tile({
             source: new ol.source.OSM({
-                "url" : loStore['customTiles'],
+                "url": loStore['customTiles'],
                 maxZoom: 15,
                 transition: tileTransition,
             }),
@@ -50,7 +54,7 @@ function createBaseLayers() {
     if (offlineMapDetail > 0) {
         world.push(new ol.layer.Tile({
             source: new ol.source.OSM({
-                "url" : "osm_tiles_offline/{z}/{x}/{y}.png",
+                "url": "osm_tiles_offline/{z}/{x}/{y}.png",
                 attributionsCollapsible: false,
                 maxZoom: offlineMapDetail,
                 transition: tileTransition,
@@ -61,37 +65,39 @@ function createBaseLayers() {
         }));
     }
 
-    if (adsbexchange) {
-        world.push(new ol.layer.Tile({
-            source: new ol.source.OSM({
-                "url" : "https://map.adsbexchange.com/mapproxy/tiles/1.0.0/osm/osm_grid/{z}/{x}/{y}.png",
-                attributionsCollapsible: false,
-                maxZoom: 16,
-                transition: tileTransition,
-            }),
-            name: 'osm_adsbx',
-            title: 'OpenStreetMap ADSBx',
-            type: 'base',
-        }));
-    } else {
-        world.push(new ol.layer.Tile({
-            source: new ol.source.OSM({
-                maxZoom: 17,
-                attributionsCollapsible: false,
-                transition: tileTransition,
-            }),
-            name: 'osm',
-            title: 'OpenStreetMap',
-            type: 'base',
-        }));
-    }
+
+    world.push(new ol.layer.Tile({
+        source: new ol.source.OSM({
+            maxZoom: 17,
+            attributionsCollapsible: false,
+            transition: tileTransition,
+            url: "https://mapproxy.adsb.lol/tiles/osm/osm_grid/{z}/{x}/{y}.png",
+        }),
+        name: 'osm',
+        title: 'OpenStreetMap',
+        type: 'base',
+    }));
+    world.push(new ol.layer.Tile({
+        source: new ol.source.XYZ({
+            url: "https://mapproxy.adsb.lol/tiles/arcgis-world-imagery/osm_grid/{z}/{x}/{y}.png",
+            attributions: 'Powered by <a href="https://www.esri.com">Esri.com</a>' +
+                '— Sources: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+            attributionsCollapsible: false,
+            maxZoom: 17,
+            transition: tileTransition,
+        }),
+        name: 'esri',
+        title: 'ESRI.com Satellite',
+        type: 'base',
+    }));
+
 
     let basemap_id = "rastertiles/voyager";
     world.push(new ol.layer.Tile({
         source: new ol.source.OSM({
-            "url" : "https://{a-d}.basemaps.cartocdn.com/"+ basemap_id + "/{z}/{x}/{y}.png",
-            "attributions" : 'Powered by <a href="https://carto.com">CARTO.com</a>'
-            + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+            "url": "https://{a-d}.basemaps.cartocdn.com/" + basemap_id + "/{z}/{x}/{y}.png",
+            "attributions": 'Powered by <a href="https://carto.com">CARTO.com</a>'
+                + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
             attributionsCollapsible: false,
             maxZoom: 15,
             transition: tileTransition,
@@ -101,10 +107,36 @@ function createBaseLayers() {
         type: 'base',
     }));
 
+        if (loStore['bingKey'] != undefined)
+        BingMapsAPIKey = loStore['bingKey'];
+
+    if (BingMapsAPIKey) {
+        world.push(new ol.layer.Tile({
+            source: new ol.source.BingMaps({
+                key: BingMapsAPIKey,
+                imagerySet: 'Aerial',
+                transition: tileTransition,
+            }),
+            name: 'bing_aerial',
+            title: 'Bing Aerial',
+            type: 'base',
+        }));
+        world.push(new ol.layer.Tile({
+            source: new ol.source.BingMaps({
+                key: BingMapsAPIKey,
+                imagerySet: 'RoadOnDemand',
+                transition: tileTransition,
+            }),
+            name: 'bing_roads',
+            title: 'Bing Roads',
+            type: 'base',
+        }));
+    }
+
     if (!adsbexchange) {
         world.push(new ol.layer.Tile({
             source: new ol.source.OSM({
-                "url" : "https://{a-d}.tile.openstreetmap.de/{z}/{x}/{y}.png",
+                "url": "https://{a-d}.tile.openstreetmap.de/{z}/{x}/{y}.png",
                 attributionsCollapsible: false,
                 maxZoom: 17,
                 transition: tileTransition,
@@ -172,22 +204,9 @@ function createBaseLayers() {
     if (!adsbexchange) {
         world.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
-                url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-                attributions: 'Powered by <a href="https://www.esri.com">Esri.com</a>' +
-                '— Sources: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-                attributionsCollapsible: false,
-                maxZoom: 17,
-                transition: tileTransition,
-            }),
-            name: 'esri',
-            title: 'ESRI.com Sat.',
-            type: 'base',
-        }));
-        world.push(new ol.layer.Tile({
-            source: new ol.source.XYZ({
                 url: "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
                 attributions: 'Powered by <a href="https://www.esri.com">Esri.com</a>' +
-                '— Sources: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+                    '— Sources: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
                 attributionsCollapsible: false,
                 maxZoom: 16,
                 transition: tileTransition,
@@ -200,7 +219,7 @@ function createBaseLayers() {
             source: new ol.source.XYZ({
                 url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
                 attributions: 'Powered by <a href="https://www.esri.com">Esri.com</a>' +
-                '— Sources: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+                    '— Sources: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
                 attributionsCollapsible: false,
                 maxZoom: 17,
                 transition: tileTransition,
@@ -243,7 +262,7 @@ function createBaseLayers() {
             dataType: 'json',
             layer: vtlayer,
             cache: false,
-        }).done(function(glStyle) {
+        }).done(function (glStyle) {
             ol.mbApplyStyle(this.layer, glStyle, 'openmaptiles');
         });
 
@@ -268,11 +287,11 @@ function createBaseLayers() {
     world.push(new ol.layer.Tile({
         source: new ol.source.OSM({
             url: 'https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3857/best/' +
-            'MODIS_Terra_CorrectedReflectance_TrueColor/default/' +
-            yesterday + '/' +
-            'GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
+                'MODIS_Terra_CorrectedReflectance_TrueColor/default/' +
+                yesterday + '/' +
+                'GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             attributions: '<a href="https://terra.nasa.gov/about/terra-instruments/modis">MODIS Terra</a> ' +
-            yesterday + ' Provided by NASA\'s Global Imagery Browse Services (GIBS), part of NASA\'s Earth Observing System Data and Information System (EOSDIS)',
+                yesterday + ' Provided by NASA\'s Global Imagery Browse Services (GIBS), part of NASA\'s Earth Observing System Data and Information System (EOSDIS)',
             maxZoom: 9,
             transition: tileTransition,
         }),
@@ -284,7 +303,7 @@ function createBaseLayers() {
     // http://basemaps.cartocdn.com
     // https://github.com/CartoDB/cartodb/wiki/BaseMaps-available
 
-    let basemaps = [ "dark_all", "dark_nolabels",
+    let basemaps = ["dark_all", "dark_nolabels",
         "light_all", "light_nolabels"
     ]
 
@@ -294,9 +313,9 @@ function createBaseLayers() {
 
             world.push(new ol.layer.Tile({
                 source: new ol.source.OSM({
-                    "url" : "https://{a-d}.basemaps.cartocdn.com/"+ basemap_id + "/{z}/{x}/{y}.png",
-                    "attributions" : 'Powered by <a href="https://carto.com">CARTO.com</a>'
-                    + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+                    "url": "https://{a-d}.basemaps.cartocdn.com/" + basemap_id + "/{z}/{x}/{y}.png",
+                    "attributions": 'Powered by <a href="https://carto.com">CARTO.com</a>'
+                        + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
                     attributionsCollapsible: false,
                     maxZoom: 15,
                     transition: tileTransition,
@@ -306,32 +325,6 @@ function createBaseLayers() {
                 type: 'base',
             }));
         }
-    }
-
-    if (loStore['bingKey'] != undefined)
-        BingMapsAPIKey = loStore['bingKey'];
-
-    if (BingMapsAPIKey) {
-        world.push(new ol.layer.Tile({
-            source: new ol.source.BingMaps({
-                key: BingMapsAPIKey,
-                imagerySet: 'Aerial',
-                transition: tileTransition,
-            }),
-            name: 'bing_aerial',
-            title: 'Bing Aerial',
-            type: 'base',
-        }));
-        world.push(new ol.layer.Tile({
-            source: new ol.source.BingMaps({
-                key: BingMapsAPIKey,
-                imagerySet: 'RoadOnDemand',
-                transition: tileTransition,
-            }),
-            name: 'bing_roads',
-            title: 'Bing Roads',
-            type: 'base',
-        }));
     }
 
     if (ChartBundleLayers) {
@@ -366,7 +359,7 @@ function createBaseLayers() {
         for (let type in chartbundleTypesAx) {
             us.push(new ol.layer.Tile({
                 source: new ol.source.OSM({
-                    url: 'https://map.adsbexchange.com/mapproxy/tiles/1.0.0/'+ type + '/osm_grid/{z}/{x}/{y}.png',
+                    url: 'https://map.adsbexchange.com/mapproxy/tiles/1.0.0/' + type + '/osm_grid/{z}/{x}/{y}.png',
                     projection: 'EPSG:3857',
                     attributions: 'Tiles courtesy of <a href="http://www.chartbundle.com/">ChartBundle</a>',
                     attributionsCollapsible: false,
@@ -376,14 +369,15 @@ function createBaseLayers() {
                 name: 'chartbundle_' + type,
                 title: chartbundleTypesAx[type],
                 type: 'base',
-                group: 'chartbundle'}));
+                group: 'chartbundle'
+            }));
         }
 
         for (let type in chartbundleTypesDirect) {
             us.push(new ol.layer.Tile({
                 source: new ol.source.TileWMS({
                     url: 'https://wms.chartbundle.com/wms',
-                    params: {LAYERS: type},
+                    params: { LAYERS: type },
                     projection: 'EPSG:3857',
                     attributions: 'Tiles courtesy of <a href="http://www.chartbundle.com/">ChartBundle</a>',
                     attributionsCollapsible: false,
@@ -393,14 +387,15 @@ function createBaseLayers() {
                 name: 'chartbundle_' + type,
                 title: chartbundleTypesDirect[type],
                 type: 'base',
-                group: 'chartbundle'}));
+                group: 'chartbundle'
+            }));
         }
     }
 
     world.push(new ol.layer.Tile({
         source: new ol.source.XYZ({
-            "url" : "https://map.adsbexchange.com/mapproxy/tiles/1.0.0/openaip/ul_grid/{z}/{x}/{y}.png",
-            "attributions" : "openAIP.net",
+            "url": "https://mapproxy.adsb.lol/tiles/openaip/openaip_grid/{z}/{x}/{y}.png",
+            "attributions": "openAIP.net",
             attributionsCollapsible: false,
             maxZoom: 12,
             transition: tileTransition,
@@ -445,6 +440,10 @@ function createBaseLayers() {
     const naExtent = [bottomLeft[0], bottomLeft[1], topRight[0], topRight[1]];
 
     if (true) {
+        // nexrad and noaa stuff
+        const bottomLeft = ol.proj.fromLonLat([-171.0, 9.0]);
+        const topRight = ol.proj.fromLonLat([-51.0, 69.0]);
+        const extent = [bottomLeft[0], bottomLeft[1], topRight[0], topRight[1]];
 
         let nexrad = new ol.layer.Tile({
             name: 'nexrad',
@@ -456,11 +455,11 @@ function createBaseLayers() {
             extent: naExtent,
         });
 
-        let refreshNexrad = function() {
+        let refreshNexrad = function () {
             // re-build the source to force a refresh of the nexrad tiles
             let now = new Date().getTime();
             let nexradSource = new ol.source.XYZ({
-                url : 'https://mesonet{1-3}.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913/{z}/{x}/{y}.png?_=' + now,
+                url: 'https://mesonet{1-3}.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913/{z}/{x}/{y}.png?_=' + now,
                 attributions: 'NEXRAD courtesy of <a href="https://mesonet.agron.iastate.edu/">IEM</a>',
                 attributionsCollapsible: false,
                 maxZoom: 8,
@@ -534,13 +533,9 @@ function createBaseLayers() {
     }
 
     if (enableDWD) {
-        const bottomLeft = ol.proj.fromLonLat([1.9,46.2]);
-        const topRight = ol.proj.fromLonLat([16.0,55.0]);
-        const dwdExtent = [bottomLeft[0], bottomLeft[1], topRight[0], topRight[1]];
-
         let dwdSource = new ol.source.TileWMS({
             url: 'https://maps.dwd.de/geoserver/wms',
-            params: {LAYERS: dwdLayers, validtime: (new Date()).getTime()},
+            params: { LAYERS: dwdLayers, validtime: (new Date()).getTime() },
             projection: 'EPSG:3857',
             attributions: 'Deutscher Wetterdienst (DWD)',
             attributionsCollapsible: false,
@@ -567,7 +562,7 @@ function createBaseLayers() {
 
 
         let refreshDwd = function () {
-            dwd.getSource().updateParams({"validtime": (new Date()).getTime()});
+            dwd.getSource().updateParams({ "validtime": (new Date()).getTime() });
         };
         refreshDwd();
         window.setInterval(refreshDwd, 2 * 60 * 1000);
@@ -657,14 +652,14 @@ function createBaseLayers() {
                 url: url,
                 transition: tileTransition,
                 format: new ol.format.GeoJSON({
-                    defaultDataProjection :'EPSG:4326',
+                    defaultDataProjection: 'EPSG:4326',
                     projection: 'EPSG:3857'
                 })
             }),
             style: function style(feature) {
                 return new ol.style.Style({
                     fill: new ol.style.Fill({
-                        color : fill
+                        color: fill
                     }),
                     stroke: new ol.style.Stroke({
                         color: stroke,
@@ -715,7 +710,7 @@ function createBaseLayers() {
     }
 
     if (l3harris) {
-        let files = ['IFT_NAV_Routes.geojson','IFT_Training_Areas.geojson','USAFA_Training_Areas.geojson'];
+        let files = ['IFT_NAV_Routes.geojson', 'IFT_Training_Areas.geojson', 'USAFA_Training_Areas.geojson'];
         for (let i in files) {
             let name = files[i].split('.')[0];
             us.push(createGeoJsonLayer(name, 'ift' + i, 'geojson/IFT/' + files[i], 'rgba(52, 50, 168, 0.3)', 'rgba(52, 50, 168, 1)'));

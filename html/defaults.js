@@ -394,3 +394,5 @@ let prefer978 = 0;
 
 
 let dynGlobeRate = false; // enable use of globeRates.json in index.html directory to steer client refresh rate
+
+let gitCommitHash = "__GIT_COMMIT_HASH__";
