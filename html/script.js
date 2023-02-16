@@ -2642,6 +2642,7 @@ function ol_map_init() {
     checkPointermove();
 }
 
+// Initalizes the map and starts up our timers to call various functions
 function initMapEarly() {
 
     // Load stored map settings if present
@@ -2863,8 +2864,8 @@ function initMap() {
             jQuery(".layer-switcher .panel").css("background", "var(--BGCOLOR1)");
             jQuery(".layer-switcher .panel").css("border", "4px solid var(--BGCOLOR1)");
             if (state) {
-                root.style.setProperty("--BGCOLOR1", '#313131');
-                root.style.setProperty("--BGCOLOR2", '#242424');
+                root.style.setProperty("--BGCOLOR1", '#0A2647');
+                root.style.setProperty("--BGCOLOR2", '#144272');
                 root.style.setProperty("--TXTCOLOR1","#BFBFBF");
                 root.style.setProperty("--TXTCOLOR2","#D8D8D8");
                 root.style.setProperty("--TXTCOLOR3","#a8a8a8");
