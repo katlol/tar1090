@@ -331,7 +331,7 @@ function processReceiverUpdate(data, init) {
         globeIndexNow[data.globeIndex] = data.now;
     }
 
-    if (!(uat || init || (globeIndex && adsbexchange))) {
+    if (!(uat || init || (globeIndex && adsblol))) {
         updateMessageRate(data);
     }
 
@@ -1697,15 +1697,15 @@ jQuery('#selected_altitude_geom1')
 
     TAR.altitudeChart.init();
 
-    if (adsbexchange) {
-        jQuery('#adsbexchange_header').show();
+    if (adsblol) {
+        jQuery('#adsblol_header').show();
         jQuery('#credits').show();
         if (!onMobile) {
             jQuery('#creditsSelected').show();
         }
-        jQuery('#selected_infoblock').addClass('adsbx-selected-bg');
+        jQuery('#selected_infoblock').addClass('adsblol-selected-bg');
         if (false && window.self != window.top) {
-            window.top.location.href = "https://www.adsbexchange.com/";
+            window.top.location.href = "https://www.example.com/";
             return;
         }
     }
@@ -2013,8 +2013,8 @@ function setIntervalTimers() {
     if (loadFinished) {
         jQuery("#timers_paused").css('display','none');
     }
-    console.log(localTime(new Date()) + " set timers ");
-    if ((adsbexchange || dynGlobeRate) && !uuid) {
+    console.log(localTime(new Date()) + ": set timers ");
+    if ((adsblol || dynGlobeRate) && !uuid) {
         timers.globeRateUpdate = setInterval(globeRateUpdate, 180000);
     }
     pollPositionInterval();
@@ -2499,6 +2499,7 @@ function ol_map_init() {
     checkPointermove();
 }
 
+// Initalizes the map and starts up our timers to call various functions
 function initMapEarly() {
 
     // Load stored map settings if present
@@ -2546,7 +2547,7 @@ function initMap() {
     zoomLvl = Number(loStore['zoomLvl']) || DefaultZoomLvl;
     zoomLvlCache = zoomLvl;
 
-    if (globeIndex && adsbexchange) {
+    if (globeIndex || adsblol) {
         jQuery('#dump1090_total_history_td').hide();
         jQuery('#dump1090_message_rate_td').hide();
     }
@@ -2701,8 +2702,8 @@ function initMap() {
             jQuery(".layer-switcher .panel").css("background", "var(--BGCOLOR1)");
             jQuery(".layer-switcher .panel").css("border", "4px solid var(--BGCOLOR1)");
             if (state) {
-                root.style.setProperty("--BGCOLOR1", '#313131');
-                root.style.setProperty("--BGCOLOR2", '#242424');
+                root.style.setProperty("--BGCOLOR1", '#0A2647');
+                root.style.setProperty("--BGCOLOR2", '#144272');
                 root.style.setProperty("--TXTCOLOR1","#BFBFBF");
                 root.style.setProperty("--TXTCOLOR2","#D8D8D8");
                 root.style.setProperty("--TXTCOLOR3","#a8a8a8");
@@ -6291,7 +6292,7 @@ function refreshInt() {
     if (!mapIsVisible)
         refresh *= 2;
 
-    if (adsbexchange && window.self != window.top) {
+    if (adsblol && window.self != window.top) {
         refresh *= 1.5;
     } else if (onMobile && TrackedAircraftPositions > 800) {
         refresh *= 1.5;
@@ -8687,7 +8688,7 @@ function requestBoxString() {
     return `${extent.minLat.toFixed(6)},${extent.maxLat.toFixed(6)},${minLon},${maxLon}`;
 }
 
-if (adsbexchange && window.location.hostname.startsWith('inaccurate')) {
+if (adsblol && window.location.hostname.startsWith('inaccurate')) {
     jQuery('#inaccurate_warning').removeClass('hidden');
     document.getElementById('inaccurate_warning').innerHTML = `
 <br>
@@ -8747,12 +8748,12 @@ function adjust_baro_alt(alt) {
 }
 
 function globeRateUpdate() {
-    if (adsbexchange) {
+    if (adsblol && false) {
         dynGlobeRate = true;
-        const cookieExp = getCookie('adsbx_sid').split('_')[0];
+        const cookieExp = getCookie('adsblol_sid').split('_')[0];
         const ts = new Date().getTime();
         if (!cookieExp || cookieExp < ts + 3600*1000)
-            setCookie('adsbx_sid', ((ts + 2*86400*1000) + '_' + Math.random().toString(36).substring(2, 15)), 2);
+            setCookie('adsblol_sid', ((ts + 2*86400*1000) + '_' + Math.random().toString(36).substring(2, 15)), 2);
     }
     if (dynGlobeRate) {
         return jQuery.ajax({url:'/globeRates.json', cache: false, dataType: 'json', }).done(function(data) {
