@@ -1,9 +1,11 @@
 FROM nginx:alpine
 WORKDIR /opt/tar1090
 COPY html .
+COPY install_cachebust.sh /tmp
 COPY nginx.conf /etc/nginx/tar1090.conf
 RUN set -ex && \
-    apk add --virtual=.build-deps git sed && \
+    apk add --virtual=.build-deps git sed bash && \
+    bash /tmp/install_cachebust.sh && \
     mkdir -p /opt/tar1090-db && \
     wget -qO- https://github.com/katlol/tar1090-db/releases/latest/download/db.tar | tar -C /opt/tar1090-db -xvf - && \
     ln -s /opt/tar1090-db/db /opt/tar1090/db2 && \
