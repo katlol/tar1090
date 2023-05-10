@@ -46,17 +46,29 @@ if icao then
         local n_aircraft = #data["aircraft"]
         if data["aircraft"] and n_aircraft > 0 then
             local aircraft_descriptions = {}
-            for _, aircraft in ipairs(data["aircraft"]) do
+            for i, aircraft in ipairs(data["aircraft"]) do
                 local callsign = aircraft["flight"] or ""
                 callsign = callsign:gsub("%s+", "")
                 local reg = aircraft["r"] or ""
                 local reg_country = find_country_by_hex(aircraft["hex"] or "")
-
-                reg = reg .. (reg ~= "" and (reg_country ~= "" and ", " or "") or "") .. reg_country
-                if reg ~= "" then
-                    reg = "(" .. reg .. ")"
-                end
-
+                reg = reg_country .. reg
+                -- if i == 1 then
+                --     -- get where we are flying from https://nominatim.openstreetmap.org/reverse?latx&lon=y&zoom=5&format=json
+                --     -- and then get .address.country, .address.state
+                --     res, err = httpc:request_uri("https://nominatim.openstreetmap.org/reverse?lat=" .. aircraft["lat"] .. "&lon=" .. aircraft["lon"] .. "&zoom=5&format=json", {
+                --         ssl_verify = false
+                --     })
+                --     if res and res.status == 200 then
+                --         local data = cjson.decode(res.body)
+                --         local country = data["address"]["country"] or ""
+                --         local state = data["address"]["state"] or ""
+                --         -- separator is ", " if both country and state are present, otherwise use ""
+                --         local separator = country ~= "" and state ~= "" and ", " or ""
+                --         -- check that iether country or state are set
+                --         if country ~= "" or state ~= "" then
+                --             table.insert(aircraft_descriptions, string.format("✈️🗺️🔎 %s%s%s", country, separator, state))
+                --         end
+                --     end
                 local type = aircraft["t"] or ""
                 type = aircraft_types[type] and aircraft_types[type][1] or type
 
