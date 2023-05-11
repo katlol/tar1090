@@ -37,9 +37,9 @@ if icao then
         })
     end
 
-    local image_url = "https://api-dev.adsb.lol/0/screenshot/" .. icao
     local description = "Check out this aircraft."
-
+    local groundspeed = -1;
+    local min_lat, min_lon, max_lat, max_lon = false, false, false, false
     if res and res.status == 200 then
         local cjson = require "cjson"
         local data = cjson.decode(res.body)
@@ -69,6 +69,30 @@ if icao then
                 --             table.insert(aircraft_descriptions, string.format("✈️🗺️🔎 %s%s%s", country, separator, state))
                 --         end
                 --     end
+                local tentative_gs = aircraft["gs"] or -1
+                if tentative_gs > groundspeed then
+                    groundspeed = tentative_gs
+                end
+                ngx.log(ngx.ERR, "groundspeed: ", groundspeed)
+                ngx.log(ngx.ERR, "ac lat: ", aircraft["lat"])
+                ngx.log(ngx.ERR, "ac lon: ", aircraft["lon"])
+                -- tonumber
+                aircraft["lat"] = tonumber(aircraft["lat"])
+                aircraft["lon"] = tonumber(aircraft["lon"])
+                if not min_lat or aircraft["lat"] < min_lat then
+                    min_lat = aircraft["lat"]
+                end
+                if not min_lon or aircraft["lon"] < min_lon then
+                    min_lon = aircraft["lon"]
+                end
+                if not max_lat or aircraft["lat"] > max_lat then
+                    max_lat = aircraft["lat"]
+                end
+                if not max_lon or aircraft["lon"] > max_lon then
+                    max_lon = aircraft["lon"]
+                end
+
+
                 local type = aircraft["t"] or ""
                 type = aircraft_types[type] and aircraft_types[type][1] or type
 
@@ -116,6 +140,15 @@ if icao then
 
     local open_graph_tags = ngx.shared.open_graph_tags
     local cache_key = icao
+
+    local image_url = "https://api-dev.adsb.lol/0/screenshot/" .. icao .. "?"
+    if groundspeed > 0 then
+        image_url = image_url .. "gs=" .. groundspeed .. "&"
+    end
+    if min_lat and min_lon and max_lat and max_lon then
+        image_url = image_url .. "min_lat=" .. min_lat .. "&min_lon=" .. min_lon .. "&max_lat=" .. max_lat .. "&max_lon=" .. max_lon .. "&"
+    end
+    ngx.log(ngx.ERR, "lat/lons: ", min_lat, min_lon, max_lat, max_lon)
     open_graph_tags:set(cache_key .. ":image", image_url)
     open_graph_tags:set(cache_key .. ":description", description)
 else
