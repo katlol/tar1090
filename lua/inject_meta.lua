@@ -96,8 +96,10 @@ if icao then
                 local type = aircraft["t"] or ""
                 type = aircraft_types[type] and aircraft_types[type][1] or type
 
-                local alt = math.floor(aircraft["alt_baro"] or 0)
-                local speed = math.floor(aircraft["gs"] or 0)
+                --local alt = aircraft["alt_baro"] or 0
+                -- alt might be '' when empty
+                local alt = tonumber(aircraft["alt_baro"]) or 0
+                local speed = tonumber(aircraft["gs"]) or 0
                 local lat = tonumber(aircraft["lat"])
                 local lon = tonumber(aircraft["lon"])
                 local country = get_country(lat, lon)
