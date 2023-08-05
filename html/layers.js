@@ -444,6 +444,24 @@ function createBaseLayers() {
 
     world.push(new ol.layer.Tile({
         source: new ol.source.XYZ({
+            "url": "https://mapproxy.adsb.lol/tiles/arcgis-human-geography-label/osm_grid/{z}/{x}/{y}.png",
+            "attributions": "Esri, HERE, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community",
+            attributionsCollapsible: false,
+            maxZoom: 12,
+            transition: tileTransition,
+        }),
+        name: 'geography-label',
+        title: 'ESRI.com Geography Labels',
+        type: 'overlay',
+        opacity: 0.7,
+        visible: false,
+        zIndex: 99,
+        maxZoom: 21,
+    }));
+
+
+    world.push(new ol.layer.Tile({
+        source: new ol.source.XYZ({
             "url": "https://mapproxy.adsb.lol/tiles/openaip/openaip_grid/{z}/{x}/{y}.png",
             "attributions": "openAIP.net",
             attributionsCollapsible: false,
@@ -654,7 +672,7 @@ function createBaseLayers() {
 
 
         let refreshDwd = function () {
-            dwd.getSource().updateParams({ "validtime": (new Date()).getTime() });
+            dwd.getSource().updateParams({"validtime": (new Date()).getTime()});
         };
         refreshDwd();
         window.setInterval(refreshDwd, 2 * 60 * 1000);
