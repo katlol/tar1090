@@ -6,6 +6,10 @@ COPY nginx.conf /etc/nginx/tar1090.conf
 
 RUN set -ex && \
     apk add --virtual=.build-deps git sed bash perl curl && \
+    apk add --virtual=.run-deps ca-certificates && \
+    # Make a single certs pem file
+    mkdir -p /etc/ssl/certs/ && \
+    cat /usr/share/ca-certificates/mozilla/* > /etc/ssl/certs/ca-certificates.pem && \
     bash /tmp/install_cachebust.sh && \
     mkdir -p /opt/tar1090-db && \
     opm get ledgetech/lua-resty-http && \
