@@ -17,11 +17,12 @@ html, body {
     padding: calc( 0px * var(--SCALE));
     background: var(--BGCOLOR1);
     background-color: var(--BGCOLOR1);
-    font-family: "Helvetica Neue", Helvetica, Verdana, sans-serif;
+    font-family: "B612", "Helvetica Neue", Helvetica, Verdana, sans-serif;
     font-size: var(--FS2);
     overflow: hidden;
     height: 100%;
     color: var(--TXTCOLOR2);
+    scrollbar-width: none;
 }
 
 select {
@@ -300,11 +301,11 @@ select {
 }
 
 .verticalRateTriangle {
-    font-family: "Courier New",monospace;
+    font-family: "B612 Mono", "Courier New",monospace;
 }
 
 .icaoCodeColumn {
-    font-family: monospace;
+    font-family: "B612 Mono", monospace;
     text-transform: uppercase;
 }
 
@@ -492,6 +493,7 @@ select.error, textarea.error, input.error {
     display: block;
     margin: calc( 1px * var(--SCALE));
     text-align: center;
+    font-family: "B612 Mono";
 }
 .buttonSpacer {
     margin: calc( 9px * var(--SCALE));
@@ -933,4 +935,33 @@ input{
 }
 #replaySpeedHint{
   grid-area: speedHint;
+}
+
+@font-face {
+    font-family: 'B612 Mono';
+    src: url('libs/fonts/B612Mono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'B612';
+    src: url('libs/fonts/B612-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'B612 Mono';
+    src: url('libs/fonts/B612Mono-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'B612';
+    src: url('libs/fonts/B612-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+
+.ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-family: 'B612', Arial,Helvetica,sans-serif !important;
 }
