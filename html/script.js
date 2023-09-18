@@ -8323,7 +8323,7 @@ function setSelectedIcao() {
         return;
     }
     selIcao = selected.icao;
-    let hex_html = "<span style='font-family: monospace;' class=identSmall>Hex:" + NBSP + selected.icao.toUpperCase() + "</span>";
+    let hex_html = "<span style='font-family: 'B612 Mono', monospace;' class=identSmall>Hex:" + NBSP + selected.icao.toUpperCase() + "</span>";
     if (globeIndex || shareBaseUrl) {
         if (copiedIcao && (copiedIcao != selected.icao || new Date().getTime() - copyLinkTime > 2000)) {
             copiedIcao = null;
