@@ -2113,7 +2113,7 @@ function webglAddLayer() {
 function webglInit() {
     let init = true;
     // if webGL failed in the last 7 days, don't even try unless people click the toggle.
-    if (loStore['webglFailStamp'] && Number(loStore['webglFailStamp']) +  7 * 24 * 3600 * 1000 > new Date().getTime()) {
+    if (false && loStore['webglFailStamp'] && Number(loStore['webglFailStamp']) +  7 * 24 * 3600 * 1000 > new Date().getTime()) {
         init = false;
         if (loStore['webgl'] == undefined)
             console.log('webGL failed in the past 7 days, not even trying to initialize it');
