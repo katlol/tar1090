@@ -651,7 +651,7 @@ function createBaseLayers() {
     if (enableDWD) {
         const bottomLeft = ol.proj.fromLonLat([1.9, 46.2]);
         const topRight = ol.proj.fromLonLat([16.0, 55.0]);
-        const extent = [bottomLeft[0], bottomLeft[1], topRight[0], topRight[1]];
+        const dwdExtent = [bottomLeft[0], bottomLeft[1], topRight[0], topRight[1]];
 
         let dwdSource = new ol.source.TileWMS({
             url: 'https://maps.dwd.de/geoserver/wms',
