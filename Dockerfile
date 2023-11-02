@@ -23,7 +23,7 @@ RUN set -ex && \
     echo "server {listen 80;listen [::]:80;server_name _;include /etc/nginx/tar1090.conf;}" > /etc/nginx/conf.d/default.conf && \
     # Add resolvers, 1.1.1.1 and 10.96.0.10
     # goes in http{}
-    sed -i'' 's/http {/http {\n    resolver 10.43.0.10 10.96.0.10 1.1.1.1;lua_shared_dict open_graph_tags 10M;\n/' /usr/local/openresty/nginx/conf/nginx.conf && \
+    sed -i'' 's/http {/http {\n    resolver 10.43.0.10 valid=30s;lua_shared_dict open_graph_tags 10M;\n/' /usr/local/openresty/nginx/conf/nginx.conf && \
     nginx -t && \
     apk del .build-deps
 COPY lua/*lua /etc/nginx/lua/
