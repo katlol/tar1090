@@ -67,7 +67,7 @@ function createBaseLayers() {
 
     world.push(new ol.layer.VectorTileLayer({
         declutter: true,
-        style: createMapboxStreetsV6Style(Style, Fill, Stroke, Icon, Text),
+        style: createMapboxStreetsV6Style(ol.style.Style, ol.style.Fill, ol.style.Stroke, ol.style.Icon, ol.style.Text),
         source: new ol.source.VectorTileSource({
             attributions:
                 '© <a href="https://www.openstreetmap.org/copyright">' +

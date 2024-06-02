@@ -25,6 +25,10 @@ RUN set -ex && \
     # goes in http{}
     sed -i'' 's/http {/http {\n    resolver 10.43.0.10 valid=30s;lua_shared_dict open_graph_tags 10M;\n/' /usr/local/openresty/nginx/conf/nginx.conf && \
     nginx -t && \
+    # find the /opt/tar1090/html/libs/ol-custom*.js filename
+    OL_CUSTOM_JS=$(ls /opt/tar1090/libs/ol-custom*.js) && \
+    # add the https://openlayers.org/en/v9.2.4/examples/resources/mapbox-streets-v6-style.js to the end of the file
+    cat /opt/tar1090/libs/mapbox-streets-v6-style.js >> $OL_CUSTOM_JS && \
     apk del .build-deps
 COPY lua/*lua /etc/nginx/lua/
 COPY lua/aircraft_types.lua /usr/local/openresty/site/lualib/
