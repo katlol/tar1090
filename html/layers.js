@@ -65,18 +65,6 @@ function createBaseLayers() {
         }));
     }
 
-    world.push(new ol.layer.VectorTileLayer({
-        declutter: true,
-        style: createMapboxStreetsV6Style(ol.style.Style, ol.style.Fill, ol.style.Stroke, ol.style.Icon, ol.style.Text),
-        source: new ol.source.VectorTileSource({
-            attributions:
-                '© <a href="https://www.openstreetmap.org/copyright">' +
-                'OpenStreetMap contributors</a>',
-            format: new ol.format.MVT(),
-            url: "https://d1zqyi8v6vm8p9.cloudfront.net/planet/{z}/{x}/{y}.mvt",
-        }),
-    }));
-
     world.push(new ol.layer.Tile({
         source: new ol.source.OSM({
             maxZoom: 17,
@@ -254,27 +242,26 @@ function createBaseLayers() {
         world.push(english_map);
     }
 
-    if (0) {
+    if (true) {
         let vtlayer = new ol.layer.VectorTile({
+            declutter: true,
             source: new ol.source.VectorTile({
-                url: "http://test02.dev.adsbexchange.com/tiles/{z}/{x}/{y}.pbf",
+                url: "https://martin.adsb.lol/tiles1/{z}/{x}/{y}",
                 format: new ol.format.MVT(),
-                maxZoom: 9,
                 transition: tileTransition,
             }),
             name: 'vtlayer',
             title: 'TEST VECTOR',
             type: 'base',
-            renderMode: 'image',
         });
 
         jQuery.ajax({
-            url: 'osm-liberty/style.json',
+            url: 'libs/adsblol-style.json',
             dataType: 'json',
             layer: vtlayer,
             cache: false,
         }).done(function (glStyle) {
-            ol.mbApplyStyle(this.layer, glStyle, 'openmaptiles');
+            ol.applyStyle(this.layer, glStyle, 'openmaptiles');
         });
 
         world.push(vtlayer);
