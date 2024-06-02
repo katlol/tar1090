@@ -65,6 +65,17 @@ function createBaseLayers() {
         }));
     }
 
+    world.push(new ol.layer.VectorTileLayer({
+        declutter: true,
+        style: createMapboxStreetsV6Style(Style, Fill, Stroke, Icon, Text),
+        source: new ol.source.VectorTileSource({
+            attributions:
+                '© <a href="https://www.openstreetmap.org/copyright">' +
+                'OpenStreetMap contributors</a>',
+            format: new ol.format.MVT(),
+            url: "https://d1zqyi8v6vm8p9.cloudfront.net/planet/{z}/{x}/{y}.mvt",
+        }),
+    }));
 
     world.push(new ol.layer.Tile({
         source: new ol.source.OSM({
