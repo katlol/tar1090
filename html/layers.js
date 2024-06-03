@@ -65,6 +65,27 @@ function createBaseLayers() {
         }));
     }
 
+    if (true) {
+        let vtlayer = new ol.layer.VectorTile({
+            declutter: true,
+            source: null,
+            name: 'osm',
+            title: 'ADSB.lol Vector',
+            type: 'base',
+        });
+
+        ol.applyStyle(vtlayer, 'libs/adsblol-style.json').then(function () {
+            vtlayer.setSource(new ol.source.VectorTile({
+                url: "https://martin.adsb.lol/tiles1/{z}/{x}/{y}",
+                format: new ol.format.MVT(),
+                transition: tileTransition,
+                maxZoom: 15
+            }));
+        });
+
+        world.push(vtlayer);
+    }
+
     world.push(new ol.layer.Tile({
         source: new ol.source.OSM({
             maxZoom: 17,
@@ -72,8 +93,8 @@ function createBaseLayers() {
             transition: tileTransition,
             url: "https://mapproxy.adsb.lol/tiles/osm/osm_grid/{z}/{x}/{y}.png",
         }),
-        name: 'osm',
-        title: 'OpenStreetMap',
+        name: 'osm_raster',
+        title: 'OpenStreetMap Raster',
         type: 'base',
     }));
     world.push(new ol.layer.Tile({
@@ -240,31 +261,6 @@ function createBaseLayers() {
         // ol-mapbox-style plugin packed in with ol ... (kinda ugly)
         //ol.applyStyle(english_map, "https://tiles.adsb.co/api/maps/basic/style.json");
         world.push(english_map);
-    }
-
-    if (true) {
-        let vtlayer = new ol.layer.VectorTile({
-            declutter: true,
-            source: new ol.source.VectorTile({
-                url: "https://martin.adsb.lol/tiles1/{z}/{x}/{y}",
-                format: new ol.format.MVT(),
-                transition: tileTransition,
-            }),
-            name: 'vtlayer',
-            title: 'TEST VECTOR',
-            type: 'base',
-        });
-
-        jQuery.ajax({
-            url: 'libs/adsblol-style.json',
-            dataType: 'json',
-            layer: vtlayer,
-            cache: false,
-        }).done(function (glStyle) {
-            ol.applyStyle(this.layer, glStyle, 'openmaptiles');
-        });
-
-        world.push(vtlayer);
     }
 
     world.push(new ol.layer.Tile({

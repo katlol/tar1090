@@ -175,7 +175,7 @@
       "source": "adsblol",
       "source-layer": "landuse",
       "filter": ["any", ["in", "pmap:kind", "aerodrome"]],
-      "paint": {"fill-color": "rgba(119, 147, 166, 0.5)"}
+      "paint": {"fill-color": "rgba(255, 176, 231, 0.4)"}
     },
     {
       "id": "transit_runway",
