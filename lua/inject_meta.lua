@@ -3,8 +3,9 @@ local args = ngx.req.get_uri_args()
 if not args["icao"] then
     return
 end
+-- get icao arg, but escape it.
+local icao = ngx.escape_uri(args["icao"])
 
-local icao = args["icao"]
 local aircraft_types = require "aircraft_types"
 local icao_ranges = require "icao_ranges"
 
