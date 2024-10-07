@@ -14,9 +14,9 @@ let g = {};
 
 let loadFinished = false;
 let Dump1090Version = "unknown version";
-let RefreshInterval = 1000;
+let RefreshInterval = 500;
 let globeSimLoad = 6;
-let aggregator = false;
+let aggregator = true;
 let enable_uat = false;
 let enable_pf_data = false;
 let HistoryChunks = false;
