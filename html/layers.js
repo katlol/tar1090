@@ -90,7 +90,7 @@ function createBaseLayers() {
     }));
     world.push(new ol.layer.Tile({
         source: new ol.source.XYZ({
-            url: "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{x}/{y}.png",
+            url: "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png",
             attributions: 'Powered by <a href="https://www.esri.com">Esri.com</a>' +
                 '— Sources: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
             attributionsCollapsible: false,
